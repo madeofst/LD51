@@ -25,11 +25,11 @@ public class WorldGrid : TileMap
         {
             //Forwards
             { new Vector2(32, 5), new Vector2(9, 12) },
-            { new Vector2(29, -1), new Vector2(23, 12) },
+            { new Vector2(29, -1), new Vector2(-4, 15) },
 
             //Backwards
             { new Vector2(9, 12), new Vector2(32, 5) },
-            { new Vector2(23, 12), new Vector2(29, -1) }
+            { new Vector2(-4, 15), new Vector2(29, -1) }
         };
 
         LeverReferences = new Dictionary<Vector2, Vector2>()
@@ -37,7 +37,7 @@ public class WorldGrid : TileMap
             //Forwards
             { new Vector2(16, 8), new Vector2(7, 7) },
             { new Vector2(29, -7), new Vector2(23, 0) },
-            { new Vector2(-4, 14), new Vector2(15, 15) },
+            { new Vector2(23, 14), new Vector2(15, 15) },
             { new Vector2(44, -4), new Vector2(35, 5) },
         };
     }
@@ -89,6 +89,7 @@ public class WorldGrid : TileMap
             Vector2 ExitTile = FindTeleportExit(EnterTile);
             if (ExitTile != EnterTile)
             {
+                Player.Teleporting = true;
                 ToggleTeleportActive(ExitTile);
                 Player.Teleport(MapToWorld(ExitTile) + new Vector2(8, 8));
                 return true;
@@ -136,22 +137,28 @@ public class WorldGrid : TileMap
 
     public void ReopenTeleport(Vector2 PlayerGlobalPosition)
     {
-        Vector2 TilePosition = WorldToMap(PlayerGlobalPosition);
-        if (!TeleportActive(TilePosition))
+        if (!Player.Teleporting)
         {
-            ToggleTeleportActive(TilePosition);
+            Vector2 TilePosition = WorldToMap(PlayerGlobalPosition);
+            if (!TeleportActive(TilePosition))
+            {
+                ToggleTeleportActive(TilePosition);
+            }
         }
     }
 
     public void ActivateAllTeleports(Vector2 PlayerGlobalPosition)
     {
-        foreach (KeyValuePair<Vector2, Vector2> entry in TeleportReferences)
+        if (!Player.Teleporting)
         {
-            if (entry.Key != WorldToMap(PlayerGlobalPosition))
+            foreach (KeyValuePair<Vector2, Vector2> entry in TeleportReferences)
             {
-                if (!TeleportActive(entry.Key))
+                if (entry.Key != WorldToMap(PlayerGlobalPosition))
                 {
-                    ToggleTeleportActive(entry.Key);
+                    if (!TeleportActive(entry.Key))
+                    {
+                        ToggleTeleportActive(entry.Key);
+                    }
                 }
             }
         }
