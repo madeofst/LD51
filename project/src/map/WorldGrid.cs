@@ -22,10 +22,12 @@ public class WorldGrid : TileMap
         TeleportReferences = new Dictionary<Vector2, Vector2>()
         {
             //Forwards
-            { new Vector2(4, 6), new Vector2(17, -11) },
+            { new Vector2(32, 5), new Vector2(16, 12) },
+            { new Vector2(29, -1), new Vector2(23, 12) },
 
             //Backwards
-            { new Vector2(17, -11), new Vector2(4, 6) }
+            { new Vector2(16, 12), new Vector2(32, 5) },
+            { new Vector2(23, 12), new Vector2(29, -1) }
         };
 
     }

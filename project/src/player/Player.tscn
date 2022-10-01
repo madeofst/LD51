@@ -4,8 +4,8 @@
 [ext_resource path="res://src/player/Player.cs" type="Script" id=2]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 4.0
-height = 4.0
+radius = 3.0
+height = 2.0
 
 [sub_resource type="Animation" id=2]
 resource_name = "Idle"
@@ -59,11 +59,12 @@ tracks/0/keys = {
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -5 )
 texture = ExtResource( 1 )
 hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 1 )
+rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

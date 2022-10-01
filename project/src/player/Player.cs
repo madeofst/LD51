@@ -8,8 +8,8 @@ public class Player : KinematicBody2D
     public Vector2 FacingDirection { get; private set; }
     public float ShoeBonus { get; set; } = 1;
 
-    public const float Acceleration = 1200;
-    public const float MaxSpeed = 8000;
+    public const float Acceleration = 1500;
+    public const float MaxSpeed = 100;
     public const float Friction = 4000;
     public Vector2 StartGlobalPosition = new Vector2(168, 88);
 
@@ -64,7 +64,7 @@ public class Player : KinematicBody2D
         if (MovementDirection != Vector2.Zero)
         {
             Velocity += MovementDirection * (Acceleration * ShoeBonus) * delta;
-            Velocity = Velocity.Clamped((MaxSpeed * ShoeBonus) * delta);
+            Velocity = Velocity.Clamped((MaxSpeed * ShoeBonus));
         }
         else
         {
@@ -73,7 +73,7 @@ public class Player : KinematicBody2D
 
         GD.Print($"{MovementDirection} {Velocity}");
 
-        MoveAndCollide(Velocity * delta);
+        Velocity = MoveAndSlide(Velocity);
     }
 
     public void Idle(string AnimationName)
