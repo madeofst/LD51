@@ -46,7 +46,7 @@ public class WorldGrid : TileMap
         if (GetCellv(TargetTile) == iShoesSet)
         {
             SetCellv(TargetTile, -1);
-            Player.ShoeBonus = Player.MaxSpeed * 0.5f;   
+            Player.ShoeBonus = 1.5f;   
         }
     }
 

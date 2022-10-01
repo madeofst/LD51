@@ -1,6 +1,13 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/timer/WorldTimer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/camera/Camera2D.cs" type="Script" id=2]
 
 [node name="Camera2D" type="Camera2D"]
-position = Vector2( 168, 80 )
+position = Vector2( 160, 88 )
 current = true
-smoothing_enabled = true
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="WorldTimer" parent="CanvasLayer" instance=ExtResource( 1 )]

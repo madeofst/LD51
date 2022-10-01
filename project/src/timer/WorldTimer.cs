@@ -8,7 +8,7 @@ public class WorldTimer : Timer
     
     public override void _Ready()
     {
-        Player = GetNode<Player>("../Player");
+        Player = GetNode<Player>("../../../Player");
         RichTextLabel = GetNode<RichTextLabel>("RichTextLabel");
     }
 
