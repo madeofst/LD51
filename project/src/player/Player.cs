@@ -17,6 +17,7 @@ public class Player : KinematicBody2D
     private WorldGrid WorldGrid;
     private WorldTimer WorldTimer;
 
+
     public override void _Ready()
     {
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
@@ -35,11 +36,20 @@ public class Player : KinematicBody2D
         this.MovementDirection = MovementDirection;
     }
 
+    public void Teleport(Vector2 Location)
+    {
+        Position = Location;
+    }
+
     public override void _PhysicsProcess(float delta)
     {
         UpdatePosition(delta);
         //GD.Print(FacingDirection);
         WorldGrid.CheckForPickups(GlobalPosition);
+
+        if (WorldGrid.CheckForTeleports(GlobalPosition))
+        if (WorldGrid.CheckForActiveTeleports(GlobalPosition)) Velocity = Vector2.Zero;
+        WorldGrid.ActivateAllTeleports(GlobalPosition);
     }
 
     public void BackToStart()
@@ -56,7 +66,7 @@ public class Player : KinematicBody2D
         Velocity = Velocity.MoveToward(Vector2.Zero, Friction * delta);
 
         //GD.Print($"{MovementDirection} {Velocity}");
-        
+
         MoveAndCollide(Velocity * delta);
     }
 
@@ -71,6 +81,7 @@ public class Player : KinematicBody2D
         {
             AnimationPlayer.Play("Smash");
             WorldGrid.SmashObjects(GlobalPosition, FacingDirection);
+            //FIXME: Switch lever
         }
     }
 }
