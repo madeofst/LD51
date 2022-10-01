@@ -10,10 +10,12 @@ public class WorldGrid : TileMap
     public const int iLeverSet = 7;
     public const int iShoesSet = 4;
     public const int iTeleportSet = 8;
+    public const int iDoorSet = 9;
 
     public Player Player;
 
     Dictionary<Vector2, Vector2> TeleportReferences;
+    Dictionary<Vector2, Vector2> LeverReferences;
 
     public override void _Ready()
     {
@@ -22,24 +24,51 @@ public class WorldGrid : TileMap
         TeleportReferences = new Dictionary<Vector2, Vector2>()
         {
             //Forwards
-            { new Vector2(32, 5), new Vector2(16, 12) },
+            { new Vector2(32, 5), new Vector2(9, 12) },
             { new Vector2(29, -1), new Vector2(23, 12) },
 
             //Backwards
-            { new Vector2(16, 12), new Vector2(32, 5) },
+            { new Vector2(9, 12), new Vector2(32, 5) },
             { new Vector2(23, 12), new Vector2(29, -1) }
         };
 
+        LeverReferences = new Dictionary<Vector2, Vector2>()
+        {
+            //Forwards
+            { new Vector2(16, 8), new Vector2(7, 7) },
+            { new Vector2(29, -7), new Vector2(23, 0) },
+            { new Vector2(-4, 14), new Vector2(15, 15) },
+            { new Vector2(44, -4), new Vector2(35, 5) },
+        };
     }
 
     public void SmashObjects(Vector2 PlayerGlobalPosition, Vector2 FacingDirection)
     {
-        Vector2 TargetTile = WorldToMap(PlayerGlobalPosition) + FacingDirection;
-        if (GetCellv(TargetTile) == 3 && GetCellAutotileCoord((int)TargetTile.x, (int)TargetTile.y) == Vector2.Zero) //Box
+        Vector2 TargetTile = WorldToMap(PlayerGlobalPosition);
+        if (GetCellv(TargetTile) == iLeverSet) //Lever
         {
-            SetCellv(TargetTile, 3, false, false, false, new Vector2(1, 0));
+            OpenGateFromLever(TargetTile);
+            SetCellv(TargetTile, iLeverSet, false, false, false, new Vector2(1, 0));
         }
-        GD.Print(WorldToMap(PlayerGlobalPosition));
+
+        TargetTile = TargetTile + FacingDirection;
+        if (GetCellv(TargetTile) == iBoxSet && GetCellAutotileCoord((int)TargetTile.x, (int)TargetTile.y) == Vector2.Zero) //Box
+        {
+            SetCellv(TargetTile, iBoxSet, false, false, false, new Vector2(1, 0));
+        }
+        else if (GetCellv(TargetTile) == iDoorSet)
+        {
+            GD.Print("Win!");
+        }
+        
+        //GD.Print(WorldToMap(PlayerGlobalPosition));
+    }
+
+    private void OpenGateFromLever(Vector2 LeverTile)
+    {   
+        Vector2 TargetTile;
+        LeverReferences.TryGetValue(LeverTile, out TargetTile);
+        SetCellv(TargetTile, -1);
     }
 
     internal void CheckForPickups(Vector2 PlayerGlobalPosition)

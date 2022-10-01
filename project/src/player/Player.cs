@@ -11,7 +11,7 @@ public class Player : KinematicBody2D
     public const float Acceleration = 1500;
     public const float MaxSpeed = 100;
     public const float Friction = 4000;
-    public Vector2 StartGlobalPosition = new Vector2(168, 88);
+    public Vector2 StartGlobalPosition = new Vector2(122, 88);
 
     private AnimationPlayer AnimationPlayer;
     private WorldGrid WorldGrid;
@@ -46,7 +46,6 @@ public class Player : KinematicBody2D
         UpdatePosition(delta);
         //GD.Print(FacingDirection);
         WorldGrid.CheckForPickups(GlobalPosition);
-
         if (WorldGrid.CheckForTeleports(GlobalPosition))
         if (WorldGrid.CheckForActiveTeleports(GlobalPosition)) Velocity = Vector2.Zero;
         WorldGrid.ActivateAllTeleports(GlobalPosition);
@@ -71,7 +70,7 @@ public class Player : KinematicBody2D
             Velocity = Velocity.MoveToward(Vector2.Zero, Friction * delta);
         }
 
-        GD.Print($"{MovementDirection} {Velocity}");
+        //GD.Print($"{MovementDirection} {Velocity}");
 
         Velocity = MoveAndSlide(Velocity);
     }
