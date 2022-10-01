@@ -9,7 +9,7 @@ public class WorldGrid : TileMap
     public const int iWallSet = 2;
     public const int iLeverSet = 7;
     public const int iShoesSet = 4;
-    public const int iTeleportSet = 8;
+    public const int iTeleportSet = 11;
     public const int iDoorSet = 9;
 
     public Player Player;
