@@ -3,14 +3,11 @@ using System;
 
 public class WorldGrid : TileMap
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    public Player Player;
 
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        
+        Player = GetNode<Player>("../Player");
     }
 
     public void SmashObjects(Vector2 PlayerGlobalPosition, Vector2 FacingDirection)
@@ -22,9 +19,19 @@ public class WorldGrid : TileMap
         }
         GD.Print(WorldToMap(PlayerGlobalPosition));
     }
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+
+    internal void CheckForPickups(Vector2 PlayerGlobalPosition)
+    {
+        Vector2 TargetTile = WorldToMap(PlayerGlobalPosition);
+        if (GetCellv(TargetTile) == 4) //Shoe
+        {
+            SetCellv(TargetTile, -1);
+            Player.ShoeBonus = Player.MaxSpeed * 0.5f;   
+        }
+    }
+    //  // Called every frame. 'delta' is the elapsed time since the previous frame.
+    //  public override void _Process(float delta)
+    //  {
+    //      
+    //  }
 } 
