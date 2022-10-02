@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class WorldGrid : TileMap
 {
     public const int iBoxSet = 3;
-    public const int iGateSet = 6;
+    public const int iGateSet = 12;
     public const int iWallSet = 2;
     public const int iLeverSet = 7;
     public const int iShoesSet = 4;
@@ -14,6 +14,9 @@ public class WorldGrid : TileMap
 
     public Player Player;
     public VictoryScreen VictoryScreen;
+    private AudioStreamPlayer GateSound;
+    private AudioStreamPlayer ShoeSound;
+    private AudioStreamPlayer BoxSound;
 
     Dictionary<Vector2, Vector2> TeleportReferences;
     Dictionary<Vector2, Vector2> LeverReferences;
@@ -22,6 +25,9 @@ public class WorldGrid : TileMap
     {
         Player = GetNode<Player>("../Player");
         VictoryScreen = ResourceLoader.Load<PackedScene>("res://src/menus/VictoryScreen.tscn").Instance<VictoryScreen>();
+        GateSound = GetNode<AudioStreamPlayer>("../Gate");
+        ShoeSound = GetNode<AudioStreamPlayer>("../Shoes");
+        BoxSound = GetNode<AudioStreamPlayer>("../Box");
 
         TeleportReferences = new Dictionary<Vector2, Vector2>()
         {
@@ -56,6 +62,7 @@ public class WorldGrid : TileMap
         TargetTile = TargetTile + FacingDirection;
         if (GetCellv(TargetTile) == iBoxSet && GetCellAutotileCoord((int)TargetTile.x, (int)TargetTile.y) == Vector2.Zero) //Box
         {
+            BoxSound.Play(0.05f);
             SetCellv(TargetTile, iBoxSet, false, false, false, new Vector2(1, 0));
         }
         else if (GetCellv(TargetTile) == iDoorSet)
@@ -69,9 +76,10 @@ public class WorldGrid : TileMap
     }
 
     private void OpenGateFromLever(Vector2 LeverTile)
-    {   
+     {   
         Vector2 TargetTile;
         LeverReferences.TryGetValue(LeverTile, out TargetTile);
+        GateSound.Play();
         SetCellv(TargetTile, -1);
     }
 
@@ -80,6 +88,7 @@ public class WorldGrid : TileMap
         Vector2 TargetTile = WorldToMap(PlayerGlobalPosition);
         if (GetCellv(TargetTile) == iShoesSet)
         {
+            ShoeSound.Play();
             SetCellv(TargetTile, -1);
             Player.ShoeBonus = 1.5f;   
         }

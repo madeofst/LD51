@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Gate.ogg-068a7edfdda0968f60340269bdf0310e.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/SFX/Gate.ogg"
+dest_files=[ "res://.import/Gate.ogg-068a7edfdda0968f60340269bdf0310e.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

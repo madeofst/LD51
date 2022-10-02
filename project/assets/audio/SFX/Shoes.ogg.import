@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Shoes.ogg-59ec1e38ff186c92256b2f0a2d459383.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/SFX/Shoes.ogg"
+dest_files=[ "res://.import/Shoes.ogg-59ec1e38ff186c92256b2f0a2d459383.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

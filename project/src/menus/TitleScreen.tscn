@@ -13,3 +13,6 @@ margin_bottom = 40.0
 mouse_filter = 0
 texture = ExtResource( 1 )
 script = ExtResource( 3 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+autoplay = true

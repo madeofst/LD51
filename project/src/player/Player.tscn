@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://assets/art/Character.png" type="Texture" id=1]
 [ext_resource path="res://src/player/Player.cs" type="Script" id=2]
@@ -65,6 +65,24 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 1 ]
+}
+
+[sub_resource type="Animation" id=26]
+resource_name = "Teleport"
+length = 0.6
+loop = true
+step = 0.15
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 18, 16, 15, 17 ]
 }
 
 [sub_resource type="AnimationNodeAnimation" id=5]
@@ -136,6 +154,9 @@ blend_point_3/node = SubResource( 22 )
 blend_point_3/pos = Vector2( -1, 0 )
 blend_mode = 1
 
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "Teleport"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id=15]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
@@ -146,15 +167,22 @@ blend_mode = 1
 switch_mode = 2
 auto_advance = true
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+
 [sub_resource type="AnimationNodeStateMachine" id=17]
 states/Idle/node = SubResource( 9 )
 states/Idle/position = Vector2( 485, 242 )
 states/Run/node = SubResource( 14 )
 states/Run/position = Vector2( 749, 242 )
 states/Smash/node = SubResource( 23 )
-states/Smash/position = Vector2( 624, 101 )
-transitions = [ "Idle", "Run", SubResource( 15 ), "Run", "Idle", SubResource( 16 ), "Idle", "Smash", SubResource( 24 ), "Smash", "Idle", SubResource( 25 ) ]
+states/Smash/position = Vector2( 485, 110 )
+states/Teleport/node = SubResource( 27 )
+states/Teleport/position = Vector2( 485, 370 )
+transitions = [ "Idle", "Run", SubResource( 15 ), "Run", "Idle", SubResource( 16 ), "Idle", "Smash", SubResource( 24 ), "Smash", "Idle", SubResource( 25 ), "Teleport", "Idle", SubResource( 28 ), "Idle", "Teleport", SubResource( 29 ) ]
 start_node = "Idle"
+graph_offset = Vector2( -48, 175 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=18]
 
@@ -187,11 +215,11 @@ anims/SmashDown = ExtResource( 13 )
 anims/SmashLeft = ExtResource( 12 )
 anims/SmashRight = ExtResource( 11 )
 anims/SmashUp = ExtResource( 14 )
+anims/Teleport = SubResource( 26 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 17 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/playback = SubResource( 18 )
 parameters/Idle/blend_position = Vector2( 0, 0 )
 parameters/Run/blend_position = Vector2( -0.26523, 0.0661478 )

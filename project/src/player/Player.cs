@@ -20,11 +20,14 @@ public class Player : KinematicBody2D
     private AnimationTree AnimationTree;
     private AnimationNodeStateMachinePlayback StateMachine;
     private WorldGrid WorldGrid;
+    private TileMap FloorFeatures;
     private TileMap Floor;
     private WorldTimer WorldTimer;
     private Sprite Sprite;
     private CollisionShape2D CollisionShape2D;
-
+    
+    public AudioStreamPlayer MusicPlayer;
+    public AudioStreamPlayer TeleportSound;
 
     public override void _Ready()
     {
@@ -33,11 +36,17 @@ public class Player : KinematicBody2D
         Sprite = GetNode<Sprite>("Sprite");
         CollisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
         Floor = GetNode<TileMap>("../Floor");
+        FloorFeatures = GetNode<TileMap>("../FloorFeatures");
         
         AnimationTree = GetNode<AnimationTree>("AnimationTree");
         AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         StateMachine = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
         AnimationTree.Active = true;
+
+        MusicPlayer = GetNode<AudioStreamPlayer>("../Music");
+        TeleportSound = GetNode<AudioStreamPlayer>("../Teleport");
+        WorldTimer.Start();
+        MusicPlayer.Play();
     }
 
     public override void _Process(float delta)
@@ -56,6 +65,8 @@ public class Player : KinematicBody2D
 
     public void Teleport(Vector2 Location)
     {
+        MusicPlayer.StreamPaused = true;
+        TeleportSound.Play();
         WorldTimer.Paused = true;
         Sprite.SelfModulate = new Color(1, 1, 1, 0.5f);
         CollisionShape2D.Disabled = true;
@@ -76,8 +87,10 @@ public class Player : KinematicBody2D
 
     public void BackToStart()
     {
+        MusicPlayer.StreamPaused = true;
         Teleporting = true;
         WorldGrid.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
+        FloorFeatures.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
         Floor.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
         Teleport(StartGlobalPosition);
     }
@@ -87,6 +100,7 @@ public class Player : KinematicBody2D
         //GD.Print(MovementDirection);
         if (Teleporting)
         {
+            StateMachine.Travel("Teleport");
             if (Position.IsEqualApprox(TeleportTarget))
             {
                 Teleporting = false;
@@ -96,9 +110,14 @@ public class Player : KinematicBody2D
                 {
                     WorldGrid.Modulate = new Color(1f, 1f, 1f, 1f);
                     Floor.Modulate = new Color(1f, 1f, 1f, 1f);
+                    FloorFeatures.Modulate = new Color(1f, 1f, 1f, 1f);
                     WorldTimer.Start();
+                    MusicPlayer.StreamPaused = false;
                 }
+                StateMachine.Travel("Idle");
                 CollisionShape2D.Disabled = false;
+                MusicPlayer.StreamPaused = false;
+                TeleportSound.Stop();
             }
             else
             {
@@ -134,11 +153,14 @@ public class Player : KinematicBody2D
     {
         if (@event.IsActionPressed("ui_smash"))
         {
-            AnimationTree.Set("parameters/Smash/blend_position", FacingDirection);
-            Smashing = true;
-            StateMachine.Travel("Smash");
-            WorldGrid.SmashObjects(GlobalPosition, FacingDirection);
-            //FIXME: Switch lever
+            if (!Teleporting)
+            {
+                AnimationTree.Set("parameters/Smash/blend_position", FacingDirection);
+                Smashing = true;
+                StateMachine.Travel("Smash");
+                WorldGrid.SmashObjects(GlobalPosition, FacingDirection);
+                //FIXME: Switch lever
+            }
         }
     }
 }
