@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/art/TitleScreen.png" type="Texture" id=1]
 [ext_resource path="res://src/menus/TitleScreen.cs" type="Script" id=2]
 [ext_resource path="res://src/menus/Title.cs" type="Script" id=3]
+[ext_resource path="res://assets/font/Retroville NC.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 10
+use_mipmaps = true
+font_data = ExtResource( 4 )
 
 [node name="TitleScreen" type="Node2D"]
 script = ExtResource( 2 )
@@ -16,3 +22,56 @@ script = ExtResource( 3 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 autoplay = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Move" type="RichTextLabel" parent="CanvasLayer"]
+margin_left = 232.0
+margin_top = 120.0
+margin_right = 288.0
+margin_bottom = 136.0
+custom_colors/default_color = Color( 0.686275, 0.627451, 0.454902, 1 )
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Move[/center]"
+text = "Move"
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+margin_left = 16.0
+margin_top = 136.0
+margin_right = 104.0
+margin_bottom = 152.0
+color = Color( 0.592157, 0.403922, 0.286275, 1 )
+
+[node name="Space" type="RichTextLabel" parent="CanvasLayer"]
+margin_left = 16.0
+margin_top = 136.0
+margin_right = 104.0
+margin_bottom = 152.0
+custom_colors/default_color = Color( 0.686275, 0.627451, 0.454902, 1 )
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Space[/center]"
+text = "Space"
+
+[node name="Action" type="RichTextLabel" parent="CanvasLayer"]
+margin_left = 32.0
+margin_top = 120.0
+margin_right = 88.0
+margin_bottom = 136.0
+custom_colors/default_color = Color( 0.686275, 0.627451, 0.454902, 1 )
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Action[/center]"
+text = "Action"
+
+[node name="Start" type="RichTextLabel" parent="CanvasLayer"]
+margin_left = 63.0
+margin_top = 99.0
+margin_right = 255.0
+margin_bottom = 115.0
+custom_colors/default_color = Color( 0.301961, 0.34902, 0.427451, 1 )
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Press Space To Start[/center]"
+text = "Press Space To Start"

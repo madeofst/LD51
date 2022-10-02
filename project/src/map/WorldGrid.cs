@@ -17,6 +17,10 @@ public class WorldGrid : TileMap
     private AudioStreamPlayer GateSound;
     private AudioStreamPlayer ShoeSound;
     private AudioStreamPlayer BoxSound;
+    private AudioStreamPlayer TeleportSound;
+
+    private TileMap FloorFeatures;
+    private TileMap Floor;
 
     Dictionary<Vector2, Vector2> TeleportReferences;
     Dictionary<Vector2, Vector2> LeverReferences;
@@ -28,6 +32,10 @@ public class WorldGrid : TileMap
         GateSound = GetNode<AudioStreamPlayer>("../Gate");
         ShoeSound = GetNode<AudioStreamPlayer>("../Shoes");
         BoxSound = GetNode<AudioStreamPlayer>("../Box");
+        TeleportSound = GetNode<AudioStreamPlayer>("../Teleport");
+
+        Floor = GetNode<TileMap>("../Floor");
+        FloorFeatures = GetNode<TileMap>("../FloorFeatures");
 
         TeleportReferences = new Dictionary<Vector2, Vector2>()
         {
@@ -104,6 +112,10 @@ public class WorldGrid : TileMap
             {
                 Player.Teleporting = true;
                 ToggleTeleportActive(ExitTile);
+                TeleportSound.Play();
+                Modulate = new Color(0.36f, 0.8f, 0.87f, 1f);
+                FloorFeatures.Modulate = new Color(0.36f, 0.8f, 0.87f, 1f);
+                Floor.Modulate = new Color(0.36f, 0.8f, 0.87f, 1f);
                 Player.Teleport(MapToWorld(ExitTile) + new Vector2(8, 8));
                 return true;
             };

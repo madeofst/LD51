@@ -6,8 +6,8 @@ public class IntroScreen : Node2D
     public Game Game;
     public RichTextLabel Text1;
     public RichTextLabel Text2;
-    public float time2 = 2.5f;
-    public float time = 1.5f;
+    public float time = 2.5f;
+    public float time2 = 2f;
 
     public override void _Ready()
     {

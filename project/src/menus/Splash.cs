@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Splash : TextureRect
+public class Splash : TextureButton
 {
 
     public TitleScreen TitleScreen;
@@ -16,14 +16,19 @@ public class Splash : TextureRect
 
         if (@event.IsActionPressed("ui_select") || @event.IsActionPressed("ui_accept"))
         {
-            if (GetNode<Game>("/root/Game") == null && GetNode<VictoryScreen>("/root/VictoryScreen") == null)
-            {
-                TitleScreen = ResourceLoader.Load<PackedScene>("res://src/menus/TitleScreen.tscn").Instance<TitleScreen>();
-                GetTree().Root.AddChild(TitleScreen);
-            }
+            Start();
         }
     }
     
+    public void Start()
+    {
+        if (GetNode<Game>("/root/Game") == null && GetNode<VictoryScreen>("/root/VictoryScreen") == null && GetNode<IntroScreen>("/root/IntroScreen") == null)
+        {
+            TitleScreen = ResourceLoader.Load<PackedScene>("res://src/menus/TitleScreen.tscn").Instance<TitleScreen>();
+            GetTree().Root.AddChild(TitleScreen);
+        }
+    }
+
     public void Deactivate()
     {
         SetProcessInput(false);

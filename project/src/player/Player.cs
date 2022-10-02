@@ -27,14 +27,15 @@ public class Player : KinematicBody2D
     private CollisionShape2D CollisionShape2D;
     
     public AudioStreamPlayer MusicPlayer;
+    public AudioStreamPlayer BackToStartSound;
     public AudioStreamPlayer TeleportSound;
 
     public override void _Ready()
     {
-        WorldGrid = GetNode<WorldGrid>("../WorldGrid");
         WorldTimer = GetNode<WorldTimer>("../Camera2D/CanvasLayer/WorldTimer");
         Sprite = GetNode<Sprite>("Sprite");
         CollisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+        WorldGrid = GetNode<WorldGrid>("../WorldGrid");
         Floor = GetNode<TileMap>("../Floor");
         FloorFeatures = GetNode<TileMap>("../FloorFeatures");
         
@@ -44,6 +45,7 @@ public class Player : KinematicBody2D
         AnimationTree.Active = true;
 
         MusicPlayer = GetNode<AudioStreamPlayer>("../Music");
+        BackToStartSound = GetNode<AudioStreamPlayer>("../BackToStart");
         TeleportSound = GetNode<AudioStreamPlayer>("../Teleport");
         WorldTimer.Start();
         MusicPlayer.Play();
@@ -66,7 +68,6 @@ public class Player : KinematicBody2D
     public void Teleport(Vector2 Location)
     {
         MusicPlayer.StreamPaused = true;
-        TeleportSound.Play();
         WorldTimer.Paused = true;
         Sprite.SelfModulate = new Color(1, 1, 1, 0.5f);
         CollisionShape2D.Disabled = true;
@@ -92,6 +93,7 @@ public class Player : KinematicBody2D
         WorldGrid.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
         FloorFeatures.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
         Floor.Modulate = new Color(0.4f, 0.42f, 0.44f, 1f);
+        BackToStartSound.Play();
         Teleport(StartGlobalPosition);
     }
 
@@ -108,15 +110,16 @@ public class Player : KinematicBody2D
                 WorldTimer.Paused = false;
                 if (TeleportTarget.IsEqualApprox(StartGlobalPosition))
                 {
-                    WorldGrid.Modulate = new Color(1f, 1f, 1f, 1f);
-                    Floor.Modulate = new Color(1f, 1f, 1f, 1f);
-                    FloorFeatures.Modulate = new Color(1f, 1f, 1f, 1f);
                     WorldTimer.Start();
                     MusicPlayer.StreamPaused = false;
                 }
+                WorldGrid.Modulate = new Color(1f, 1f, 1f, 1f);
+                Floor.Modulate = new Color(1f, 1f, 1f, 1f);
+                FloorFeatures.Modulate = new Color(1f, 1f, 1f, 1f);
                 StateMachine.Travel("Idle");
                 CollisionShape2D.Disabled = false;
                 MusicPlayer.StreamPaused = false;
+                BackToStartSound.Stop();
                 TeleportSound.Stop();
             }
             else

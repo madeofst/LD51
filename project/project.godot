@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="MichaelFinneganBeginsAgain"
-run/main_scene="res://src/game/Game.tscn"
+run/main_scene="res://src/menus/SplashScreen.tscn"
 config/icon="res://assets/art/icon.png"
 
 [display]

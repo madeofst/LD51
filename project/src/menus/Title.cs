@@ -9,7 +9,7 @@ public class Title : TextureRect
 
     public override void _Ready()
     {
-        IntroScreen = ResourceLoader.Load<PackedScene>("res://src/menus/IntroScreen.tscn").Instance<IntroScreen>();
+        
         Splash = GetNode<Splash>("/root/SplashScreen/Splash");
         Splash.Deactivate();
     }
@@ -21,8 +21,10 @@ public class Title : TextureRect
         {
             if (GetNode<Game>("/root/Game") == null)
             {
-                GetTree().Root.AddChild(IntroScreen);
+                IntroScreen = ResourceLoader.Load<PackedScene>("res://src/menus/IntroScreen.tscn").Instance<IntroScreen>();
+                GetTree().Root.AddChildBelowNode(GetParent<TitleScreen>(), IntroScreen);
                 GetParent().QueueFree();
+                //GetParent<TitleScreen>().DeleteSelf();
             }
         }
     }

@@ -1,5 +1,6 @@
 # Editor
 .vscode
+.export
 
 # Godot-specific ignores
 .import/
