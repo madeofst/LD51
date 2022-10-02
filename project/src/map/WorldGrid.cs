@@ -13,6 +13,7 @@ public class WorldGrid : TileMap
     public const int iDoorSet = 9;
 
     public Player Player;
+    public VictoryScreen VictoryScreen;
 
     Dictionary<Vector2, Vector2> TeleportReferences;
     Dictionary<Vector2, Vector2> LeverReferences;
@@ -20,6 +21,7 @@ public class WorldGrid : TileMap
     public override void _Ready()
     {
         Player = GetNode<Player>("../Player");
+        VictoryScreen = ResourceLoader.Load<PackedScene>("res://src/menus/VictoryScreen.tscn").Instance<VictoryScreen>();
 
         TeleportReferences = new Dictionary<Vector2, Vector2>()
         {
@@ -58,7 +60,9 @@ public class WorldGrid : TileMap
         }
         else if (GetCellv(TargetTile) == iDoorSet)
         {
-            GD.Print("Win!");
+            VictoryScreen.Test();
+            GetTree().Root.AddChild(VictoryScreen);
+            GetParent().QueueFree();
         }
         
         //GD.Print(WorldToMap(PlayerGlobalPosition));

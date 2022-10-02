@@ -13,5 +13,8 @@ data_*/
 # Ableton wav recordings
 design/audio/Music/Samples/Recorded
 design/audio/Music/Samples/Processed
+design/audio/Music/Exports
+
 design/audio/SFX/Samples/Recorded
 design/audio/SFX/Samples/Processed
+design/audio/SFX/Exports

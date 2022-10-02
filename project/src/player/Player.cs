@@ -9,6 +9,7 @@ public class Player : KinematicBody2D
     public float ShoeBonus { get; set; } = 1;
     public bool Teleporting { get; set; } = false;
     private Vector2 TeleportTarget { get; set; }
+    public bool Smashing { get; private set; } = false;
 
     public const float Acceleration = 1500;
     public const float MaxSpeed = 100;
@@ -16,6 +17,8 @@ public class Player : KinematicBody2D
     public Vector2 StartGlobalPosition = new Vector2(122, 88);
 
     private AnimationPlayer AnimationPlayer;
+    private AnimationTree AnimationTree;
+    private AnimationNodeStateMachinePlayback StateMachine;
     private WorldGrid WorldGrid;
     private TileMap Floor;
     private WorldTimer WorldTimer;
@@ -25,12 +28,16 @@ public class Player : KinematicBody2D
 
     public override void _Ready()
     {
-        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         WorldGrid = GetNode<WorldGrid>("../WorldGrid");
         WorldTimer = GetNode<WorldTimer>("../Camera2D/CanvasLayer/WorldTimer");
         Sprite = GetNode<Sprite>("Sprite");
         CollisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
         Floor = GetNode<TileMap>("../Floor");
+        
+        AnimationTree = GetNode<AnimationTree>("AnimationTree");
+        AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        StateMachine = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
+        AnimationTree.Active = true;
     }
 
     public override void _Process(float delta)
@@ -95,17 +102,22 @@ public class Player : KinematicBody2D
             }
             else
             {
-                Position = Position.MoveToward(TeleportTarget, delta * MaxSpeed * 2);
+                Position = Position.MoveToward(TeleportTarget, MaxSpeed * 2 * delta);
             }
         }
-        else if (MovementDirection != Vector2.Zero)
+        else if (MovementDirection != Vector2.Zero && !Smashing)
         {
-            Velocity += MovementDirection * (Acceleration * ShoeBonus) * delta;
+            AnimationTree.Set("parameters/Idle/blend_position", MovementDirection);
+            AnimationTree.Set("parameters/Run/blend_position", MovementDirection);
+            
+            StateMachine.Travel("Run");
+            Velocity += MovementDirection * (Acceleration) * delta;
             Velocity = Velocity.Clamped((MaxSpeed * ShoeBonus));
         }
         else
         {
-            Velocity = Velocity.MoveToward(Vector2.Zero, Friction * delta);
+            if (!Smashing) StateMachine.Travel("Idle");
+            Velocity = Velocity.MoveToward(Vector2.Zero, Friction * ShoeBonus * delta);
         }
 
         //GD.Print($"{MovementDirection} {Velocity}");
@@ -113,16 +125,18 @@ public class Player : KinematicBody2D
         if (!Teleporting) Velocity = MoveAndSlide(Velocity);
     }
 
-    public void Idle(string AnimationName)
+    public void SmashComplete()
     {
-        AnimationPlayer.Play("Idle");
+        Smashing = false;
     }
 
     public override void _Input(InputEvent @event)
     {
         if (@event.IsActionPressed("ui_smash"))
         {
-            AnimationPlayer.Play("Smash");
+            AnimationTree.Set("parameters/Smash/blend_position", FacingDirection);
+            Smashing = true;
+            StateMachine.Travel("Smash");
             WorldGrid.SmashObjects(GlobalPosition, FacingDirection);
             //FIXME: Switch lever
         }
