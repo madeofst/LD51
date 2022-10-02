@@ -12,6 +12,7 @@ script = ExtResource( 2 )
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 0
+input_pass_on_modal_close_click = false
 texture = ExtResource( 1 )
 script = ExtResource( 3 )
 

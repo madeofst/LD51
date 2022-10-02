@@ -18,6 +18,7 @@ public class WorldGrid : TileMap
     private AudioStreamPlayer ShoeSound;
     private AudioStreamPlayer BoxSound;
     private AudioStreamPlayer TeleportSound;
+    private WorldTimer WorldTimer;
 
     private TileMap FloorFeatures;
     private TileMap Floor;
@@ -33,6 +34,7 @@ public class WorldGrid : TileMap
         ShoeSound = GetNode<AudioStreamPlayer>("../Shoes");
         BoxSound = GetNode<AudioStreamPlayer>("../Box");
         TeleportSound = GetNode<AudioStreamPlayer>("../Teleport");
+        WorldTimer = GetNode<WorldTimer>("../Camera2D/CanvasLayer/WorldTimer");
 
         Floor = GetNode<TileMap>("../Floor");
         FloorFeatures = GetNode<TileMap>("../FloorFeatures");
@@ -97,6 +99,7 @@ public class WorldGrid : TileMap
         if (GetCellv(TargetTile) == iShoesSet)
         {
             ShoeSound.Play();
+            WorldTimer.ShoeMessage.PercentVisible = 1;
             SetCellv(TargetTile, -1);
             Player.ShoeBonus = 1.5f;   
         }

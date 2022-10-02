@@ -5,11 +5,13 @@ public class WorldTimer : Timer
 {
     public RichTextLabel RichTextLabel;
     public Player Player;
+    public RichTextLabel ShoeMessage;
     
     public override void _Ready()
     {
         Player = GetNode<Player>("../../../Player");
         RichTextLabel = GetNode<RichTextLabel>("RichTextLabel");
+        ShoeMessage = GetNode<RichTextLabel>("../RichTextLabel");
     }
 
     public override void _Process(float delta)
@@ -26,6 +28,7 @@ public class WorldTimer : Timer
 
     public void TimeUp()
     {
+        ShoeMessage.PercentVisible = 0;
         Player.BackToStart();
     }
 }
